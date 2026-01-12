@@ -1,14 +1,152 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Do You Love Me?</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Love Story ❤️</title>
+
+<style>
+body{
+  margin:0;
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+  font-family: "Segoe UI", sans-serif;
+  text-align:center;
+  color:#fff;
+}
+
+.container{
+  padding:20px;
+  max-width:420px;
+  margin:auto;
+}
+
+h1{
+  font-size:26px;
+  margin-top:20px;
+}
+
+.love-text{
+  font-size:16px;
+  line-height:1.6;
+  margin-top:10px;
+}
+
+.counter{
+  margin-top:20px;
+  background:rgba(255,255,255,0.2);
+  padding:15px;
+  border-radius:15px;
+  font-size:16px;
+}
+
+.big-love{
+  margin-top:25px;
+  font-size:28px;
+  font-weight:bold;
+  color:#fff;
+  text-shadow:0 0 10px #ff4d6d;
+}
+
+.buttons{
+  margin-top:25px;
+  position:relative;
+  height:60px;
+}
+
+button{
+  padding:10px 22px;
+  border:none;
+  border-radius:25px;
+  font-size:16px;
+  cursor:pointer;
+  position:absolute;
+}
+
+#yesBtn{
+  background:#ff4d6d;
+  color:white;
+  left:70px;
+}
+
+#noBtn{
+  background:#ddd;
+  left:170px;
+}
+
+#result{
+  display:none;
+  margin-top:20px;
+  font-size:22px;
+  color:#fff;
+}
+</style>
 </head>
-<body style="text-align:center; background:pink;">
 
-<h1>Do you love me?</h1>
+<body>
 
-<button onclick="alert('I knew it ❤️')">Yes</button>
-<button onmouseover="this.style.position='absolute'; this.style.left=Math.random()*300+'px'; this.style.top=Math.random()*300+'px'">No</button>
+<div class="container">
+
+<h1>Do you love me? 💕</h1>
+
+<div class="love-text">
+From the moment you entered my life, everything changed.<br>
+You are my smile, my peace, my forever.<br>
+Every heartbeat whispers your name. ❤️
+</div>
+
+<div class="counter" id="counter"></div>
+
+<div class="big-love">
+ILYSSSSM Alnuuhhsss 💖
+</div>
+
+<div class="buttons">
+<button id="yesBtn">Yes</button>
+<button id="noBtn">No</button>
+</div>
+
+<div id="result">I knew it 😍 Forever us ❤️</div>
+
+</div>
+
+<script>
+// Love counter
+const startDate = new Date("2024-11-02T00:00:00");
+
+function updateCounter(){
+  const now = new Date();
+  let diff = now - startDate;
+
+  let seconds = Math.floor(diff/1000)%60;
+  let minutes = Math.floor(diff/1000/60)%60;
+  let hours = Math.floor(diff/1000/60/60)%24;
+  let days = Math.floor(diff/1000/60/60/24);
+
+  document.getElementById("counter").innerHTML =
+  "We have been committed for ❤️<br><br>" +
+  days + " Days " + hours + " Hours " +
+  minutes + " Minutes " + seconds + " Seconds";
+}
+
+setInterval(updateCounter,1000);
+updateCounter();
+
+// No button run away
+const noBtn=document.getElementById("noBtn");
+const container=document.querySelector(".container");
+
+noBtn.addEventListener("mouseover",()=>{
+  const maxX=container.clientWidth-noBtn.clientWidth;
+  const maxY=container.clientHeight-noBtn.clientHeight;
+  noBtn.style.left=Math.random()*maxX+"px";
+  noBtn.style.top=Math.random()*maxY+"px";
+});
+
+// Yes button
+document.getElementById("yesBtn").addEventListener("click",()=>{
+  document.getElementById("result").style.display="block";
+});
+</script>
 
 </body>
 </html>
