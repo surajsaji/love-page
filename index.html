@@ -3,81 +3,117 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Our Love Story ❤️</title>
+<title>For You ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 body{
   margin:0;
-  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
-  font-family: "Segoe UI", sans-serif;
+  min-height:100vh;
+  background:linear-gradient(135deg,#ff758c,#ff7eb3,#ffd1dc);
+  background-size:400% 400%;
+  animation:bgMove 10s ease infinite;
+  font-family:'Poppins',sans-serif;
+  color:white;
   text-align:center;
-  color:#fff;
+  overflow:hidden;
+}
+
+@keyframes bgMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 
 .container{
-  padding:20px;
+  padding:25px;
   max-width:420px;
   margin:auto;
+  position:relative;
+  z-index:2;
 }
 
-h1{
-  font-size:26px;
+/* FLOATING HEARTS */
+.heart{
+  position:fixed;
+  bottom:-20px;
+  font-size:20px;
+  animation:floatUp 6s linear infinite;
+  opacity:0.8;
+}
+
+@keyframes floatUp{
+  0%{transform:translateY(0); opacity:1;}
+  100%{transform:translateY(-110vh); opacity:0;}
+}
+
+/* ---------- FIRST PAGE ---------- */
+#firstPage{
+  display:block;
+}
+
+.first-title{
+  font-family:'Great Vibes',cursive;
+  font-size:42px;
+  margin-top:80px;
+}
+
+.first-text{
+  margin-top:20px;
+  font-size:18px;
+  line-height:1.8;
+}
+
+.openBtn{
+  margin-top:40px;
+  padding:14px 30px;
+  border:none;
+  border-radius:30px;
+  font-size:18px;
+  background:#ff2f68;
+  color:white;
+  cursor:pointer;
+  box-shadow:0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* ---------- SECOND PAGE ---------- */
+#secondPage{
+  display:none;
+}
+
+.title{
+  font-family:'Great Vibes',cursive;
+  font-size:36px;
   margin-top:20px;
 }
 
-.love-text{
+.text{
   font-size:16px;
-  line-height:1.6;
-  margin-top:10px;
+  line-height:1.8;
+  margin-top:15px;
 }
 
 .counter{
-  margin-top:20px;
-  background:rgba(255,255,255,0.2);
+  margin-top:25px;
+  background:rgba(255,255,255,0.25);
   padding:15px;
-  border-radius:15px;
+  border-radius:20px;
   font-size:16px;
+  backdrop-filter:blur(5px);
 }
 
-.big-love{
+.big{
   margin-top:25px;
-  font-size:28px;
-  font-weight:bold;
-  color:#fff;
-  text-shadow:0 0 10px #ff4d6d;
+  font-size:30px;
+  font-weight:600;
+  text-shadow:0 0 15px rgba(255,255,255,0.7);
 }
 
-.buttons{
+.footer{
   margin-top:25px;
-  position:relative;
-  height:60px;
-}
-
-button{
-  padding:10px 22px;
-  border:none;
-  border-radius:25px;
-  font-size:16px;
-  cursor:pointer;
-  position:absolute;
-}
-
-#yesBtn{
-  background:#ff4d6d;
-  color:white;
-  left:70px;
-}
-
-#noBtn{
-  background:#ddd;
-  left:170px;
-}
-
-#result{
-  display:none;
-  margin-top:20px;
-  font-size:22px;
-  color:#fff;
+  font-size:20px;
+  font-family:'Great Vibes',cursive;
 }
 </style>
 </head>
@@ -86,66 +122,83 @@ button{
 
 <div class="container">
 
-<h1>Do you love me? 💕</h1>
+<!-- FIRST SCREEN -->
+<div id="firstPage">
+  <div class="first-title">Heyy my Alnuhsss ❤️</div>
 
-<div class="love-text">
-From the moment you entered my life, everything changed.<br>
-You are my smile, my peace, my forever.<br>
-Every heartbeat whispers your name. ❤️
+  <div class="first-text">
+    I made something very special for you<br>
+    to make you happy 💕
+  </div>
+
+  <button class="openBtn" onclick="openLove()">Open My Heart 💌</button>
 </div>
 
-<div class="counter" id="counter"></div>
+<!-- SECOND SCREEN (UNCHANGED) -->
+<div id="secondPage">
 
-<div class="big-love">
-ILYSSSSM Alnuuhhsss 💖
+  <div class="title">Our Love Story 💕</div>
+
+  <div class="text">
+    From the day you entered my life,<br>
+    everything started making sense.<br>
+    You are my peace, my smile, my forever. ❤️
+  </div>
+
+  <div class="counter" id="counter"></div>
+
+  <div class="big">
+    ILYSSSSM Alnuuhhsss 💖
+  </div>
+
+  <div class="footer">
+    Thank you for everything baby! 💕
+  </div>
+
 </div>
-
-<div class="buttons">
-<button id="yesBtn">Yes</button>
-<button id="noBtn">No</button>
-</div>
-
-<div id="result">I knew it 😍 Forever us ❤️</div>
 
 </div>
 
 <script>
+// Floating hearts
+function createHeart(){
+  const heart=document.createElement("div");
+  heart.className="heart";
+  heart.innerHTML="❤️";
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.fontSize=(14+Math.random()*20)+"px";
+  heart.style.animationDuration=(4+Math.random()*4)+"s";
+  document.body.appendChild(heart);
+
+  setTimeout(()=>{heart.remove();},6000);
+}
+setInterval(createHeart,500);
+
+// Page switch
+function openLove(){
+  document.getElementById("firstPage").style.display="none";
+  document.getElementById("secondPage").style.display="block";
+}
+
 // Love counter
-const startDate = new Date("2024-11-02T00:00:00");
+const startDate=new Date("2024-11-02T00:00:00");
 
 function updateCounter(){
-  const now = new Date();
-  let diff = now - startDate;
+ const now=new Date();
+ let diff=now-startDate;
 
-  let seconds = Math.floor(diff/1000)%60;
-  let minutes = Math.floor(diff/1000/60)%60;
-  let hours = Math.floor(diff/1000/60/60)%24;
-  let days = Math.floor(diff/1000/60/60/24);
+ let s=Math.floor(diff/1000)%60;
+ let m=Math.floor(diff/1000/60)%60;
+ let h=Math.floor(diff/1000/60/60)%24;
+ let d=Math.floor(diff/1000/60/60/24);
 
-  document.getElementById("counter").innerHTML =
-  "We have been committed for ❤️<br><br>" +
-  days + " Days " + hours + " Hours " +
-  minutes + " Minutes " + seconds + " Seconds";
+ document.getElementById("counter").innerHTML=
+ "Together since 2 Nov 2024 ❤️<br><br>"+
+ d+" Days "+h+" Hours "+m+" Minutes "+s+" Seconds";
 }
 
 setInterval(updateCounter,1000);
 updateCounter();
-
-// No button run away
-const noBtn=document.getElementById("noBtn");
-const container=document.querySelector(".container");
-
-noBtn.addEventListener("mouseover",()=>{
-  const maxX=container.clientWidth-noBtn.clientWidth;
-  const maxY=container.clientHeight-noBtn.clientHeight;
-  noBtn.style.left=Math.random()*maxX+"px";
-  noBtn.style.top=Math.random()*maxY+"px";
-});
-
-// Yes button
-document.getElementById("yesBtn").addEventListener("click",()=>{
-  document.getElementById("result").style.display="block";
-});
 </script>
 
 </body>
