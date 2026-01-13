@@ -20,10 +20,6 @@ body{
   overflow:hidden;
 }
 
-body.explodeBG{
-  background:radial-gradient(circle,#000,#4b0015,#ff4d6d);
-}
-
 @keyframes bgMove{
   0%{background-position:0% 50%}
   50%{background-position:100% 50%}
@@ -34,8 +30,6 @@ body.explodeBG{
   padding:20px;
   max-width:420px;
   margin:auto;
-  position:relative;
-  z-index:2;
 }
 
 #bigHeart{
@@ -97,7 +91,7 @@ body.explodeBG{
     Your smile = my happiness ❤️
   </div>
 
-  <button class="openBtn" id="openBtn" onclick="openLove()">Reveal My Heart 💖</button>
+  <button class="openBtn" onclick="openLove()">Reveal My Heart 💖</button>
   <div id="bigHeart"></div>
 </div>
 
@@ -122,26 +116,7 @@ body.explodeBG{
 <script>
 let scene,camera,renderer,heart;
 
-// VEIN TEXTURE
-function createVeinTexture(){
-  const c=document.createElement("canvas");
-  c.width=c.height=512;
-  const ctx=c.getContext("2d");
-  ctx.fillStyle="#600015";
-  ctx.fillRect(0,0,512,512);
-
-  ctx.strokeStyle="#ff4d6d";
-  ctx.lineWidth=2;
-  for(let i=0;i<60;i++){
-    ctx.beginPath();
-    ctx.moveTo(256,256);
-    ctx.lineTo(Math.random()*512,Math.random()*512);
-    ctx.stroke();
-  }
-  return new THREE.CanvasTexture(c);
-}
-
-// 3D HEART
+// HEART SETUP
 function initHeart(){
   const box=document.getElementById("bigHeart");
 
@@ -151,44 +126,35 @@ function initHeart(){
 
   renderer=new THREE.WebGLRenderer({alpha:true,antialias:true});
   renderer.setSize(220,220);
+  box.innerHTML="";
   box.appendChild(renderer.domElement);
+
+  const light1=new THREE.PointLight(0xff5577,1,10);
+  light1.position.set(5,5,5);
+  scene.add(light1);
+
+  const light2=new THREE.PointLight(0xffffff,0.8,10);
+  light2.position.set(-5,-5,5);
+  scene.add(light2);
 
   const loader=new THREE.GLTFLoader();
 
   loader.load(
-    "https://rawcdn.githack.com/KhronosGroup/glTF-Sample-Models/master/2.0/Heart/glTF-Binary/Heart.glb",
+    "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Heart/glTF-Binary/Heart.glb",
     gltf=>{
       heart=gltf.scene.children[0];
-      const veinMap=createVeinTexture();
-
-      heart.material=new THREE.MeshStandardMaterial({
-        color:0xb0002a,
-        map:veinMap,
-        roughness:0.35,
-        metalness:0.1,
-        emissive:new THREE.Color(0x330010),
-        emissiveIntensity:0.4
-      });
-
+      heart.scale.set(1.5,1.5,1.5);
       scene.add(heart);
     },
     undefined,
     ()=>{
-      // fallback geometry
+      // FALLBACK HEART
       const geo=new THREE.IcosahedronGeometry(1.2,2);
       const mat=new THREE.MeshStandardMaterial({color:0xb0002a});
       heart=new THREE.Mesh(geo,mat);
       scene.add(heart);
     }
   );
-
-  const l1=new THREE.PointLight(0xff5577,1,10);
-  l1.position.set(5,5,5);
-  scene.add(l1);
-
-  const l2=new THREE.PointLight(0xffffff,0.8,10);
-  l2.position.set(-5,-5,5);
-  scene.add(l2);
 
   animateHeart();
 }
@@ -202,12 +168,8 @@ function animateHeart(){
     heart.scale.set(beat,beat,beat);
     heart.rotation.y+=0.01;
 
-    heart.material.emissiveIntensity=0.5+Math.sin(Date.now()*0.006)*0.3;
-
-    if(navigator.vibrate){
-      if(Math.sin(Date.now()*0.004)>0.95){
-        navigator.vibrate(40);
-      }
+    if(navigator.vibrate && Math.sin(Date.now()*0.004)>0.95){
+      navigator.vibrate(40);
     }
   }
 
@@ -216,8 +178,6 @@ function animateHeart(){
 
 // REVEAL
 function openLove(){
-  document.body.classList.add("explodeBG");
-  document.getElementById("openBtn").style.display="none";
   document.getElementById("bigHeart").style.display="block";
   initHeart();
 
