@@ -22,7 +22,7 @@ body{
 }
 
 body.explodeBG{
-  background:radial-gradient(circle at center,#fff0f6,#ff9ab5,#ff4d6d);
+  background:radial-gradient(circle,#fff0f6,#ff9ab5,#ff4d6d);
 }
 
 @keyframes bgMove{
@@ -39,7 +39,7 @@ body.explodeBG{
   z-index:2;
 }
 
-/* FLOATING HEARTS */
+/* Floating hearts */
 .heart{
   position:fixed;
   bottom:-20px;
@@ -53,7 +53,7 @@ body.explodeBG{
   100%{transform:translateY(-110vh); opacity:0;}
 }
 
-/* EXPLOSION HEARTS */
+/* Explosion hearts */
 .burst{
   position:fixed;
   left:50%;
@@ -68,9 +68,8 @@ body.explodeBG{
   100%{transform:translate(var(--x),var(--y)) scale(1.5); opacity:0;}
 }
 
-/* ---------- FIRST PAGE ---------- */
+/* First page */
 #firstPage{
-  display:block;
   margin-top:120px;
   transition:opacity 1s ease;
 }
@@ -100,22 +99,29 @@ body.explodeBG{
   box-shadow:0 5px 15px rgba(0,0,0,0.3);
 }
 
-/* HEART REVEAL */
+/* Realistic Heart */
 #bigHeart{
   display:none;
-  font-size:80px;
   margin-top:40px;
-  animation:pulse 1.2s infinite;
-  text-shadow:0 0 25px rgba(255,255,255,0.8);
 }
 
-@keyframes pulse{
-  0%{transform:scale(1)}
-  50%{transform:scale(1.3)}
-  100%{transform:scale(1)}
+.realHeart{
+  width:130px;
+  filter:drop-shadow(0 0 25px rgba(255,0,80,0.8));
+  animation:heartBeat 1.3s infinite ease-in-out;
+  transform-origin:center;
 }
 
-/* ---------- SECOND PAGE ---------- */
+@keyframes heartBeat{
+  0%{transform:scale(1) rotate(0deg);}
+  20%{transform:scale(1.12) rotate(1deg);}
+  40%{transform:scale(0.95) rotate(-1deg);}
+  60%{transform:scale(1.15) rotate(1deg);}
+  80%{transform:scale(1);}
+  100%{transform:scale(1);}
+}
+
+/* Second page */
 #secondPage{
   display:none;
   animation:fadeIn 1.5s ease;
@@ -173,7 +179,19 @@ body.explodeBG{
   </div>
 
   <button class="openBtn" id="openBtn" onclick="openLove()">Reveal My Heart 💖</button>
-  <div id="bigHeart">❤️</div>
+
+  <div id="bigHeart">
+    <svg class="realHeart" viewBox="0 0 512 512">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#ff5a7a"/>
+          <stop offset="50%" stop-color="#c4002f"/>
+          <stop offset="100%" stop-color="#ff8aa0"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#g1)" d="M256 464s-64-48-112-96c-56-56-96-112-96-176C48 112 112 48 192 48c40 0 64 16 64 16s24-16 64-16c80 0 144 64 144 144 0 64-40 120-96 176-48 48-112 96-112 96z"/>
+    </svg>
+  </div>
 </div>
 
 <div id="secondPage">
@@ -183,11 +201,10 @@ body.explodeBG{
   <div class="text">
     From the day you entered my life,<br>
     everything started making sense.<br><br>
-    You changed my world without trying,<br>
-    loved me without conditions,<br>
-    and stayed even when it was hard.<br><br>
-    You are not just my love,<br>
-    you are my home, my forever, my miracle. ❤️
+    You healed parts of me I never knew were broken,<br>
+    and loved me in ways I never imagined.<br><br>
+    You are my peace, my home,<br>
+    my forever, my miracle. ❤️
   </div>
 
   <div class="counter" id="counter"></div>
@@ -214,27 +231,11 @@ function createHeart(){
   heart.style.fontSize=(14+Math.random()*20)+"px";
   heart.style.animationDuration=(4+Math.random()*4)+"s";
   document.body.appendChild(heart);
-  setTimeout(()=>{heart.remove();},6000);
+  setTimeout(()=>heart.remove(),6000);
 }
 setInterval(createHeart,500);
 
-// SOUND EFFECT
-function playExplosionSound(){
-  const ctx=new (window.AudioContext||window.webkitAudioContext)();
-  const osc=ctx.createOscillator();
-  const gain=ctx.createGain();
-  osc.type="triangle";
-  osc.frequency.setValueAtTime(300,ctx.currentTime);
-  osc.frequency.exponentialRampToValueAtTime(60,ctx.currentTime+0.5);
-  gain.gain.setValueAtTime(0.3,ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.6);
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.start();
-  osc.stop(ctx.currentTime+0.6);
-}
-
-// HEART EXPLOSION
+// Explosion
 function explodeHearts(){
   for(let i=0;i<40;i++){
     const h=document.createElement("div");
@@ -249,9 +250,8 @@ function explodeHearts(){
   }
 }
 
-// Reveal animation
+// Reveal
 function openLove(){
-  playExplosionSound();
   explodeHearts();
   document.body.classList.add("explodeBG");
 
@@ -268,7 +268,7 @@ function openLove(){
   },2500);
 }
 
-// Love counter
+// Counter
 const startDate=new Date("2024-11-02T00:00:00");
 
 function updateCounter(){
