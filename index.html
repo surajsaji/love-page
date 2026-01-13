@@ -18,6 +18,11 @@ body{
   color:white;
   text-align:center;
   overflow:hidden;
+  transition:background 1.5s ease;
+}
+
+body.explodeBG{
+  background:radial-gradient(circle at center,#fff0f6,#ff9ab5,#ff4d6d);
 }
 
 @keyframes bgMove{
@@ -46,6 +51,21 @@ body{
 @keyframes floatUp{
   0%{transform:translateY(0); opacity:1;}
   100%{transform:translateY(-110vh); opacity:0;}
+}
+
+/* EXPLOSION HEARTS */
+.burst{
+  position:fixed;
+  left:50%;
+  top:50%;
+  font-size:22px;
+  animation:burstMove 1.5s ease-out forwards;
+  pointer-events:none;
+}
+
+@keyframes burstMove{
+  0%{transform:translate(-50%,-50%) scale(0.5); opacity:1;}
+  100%{transform:translate(var(--x),var(--y)) scale(1.5); opacity:0;}
 }
 
 /* ---------- FIRST PAGE ---------- */
@@ -146,7 +166,6 @@ body{
 
 <div class="container">
 
-<!-- FIRST SCREEN -->
 <div id="firstPage">
   <div class="first-title">
     Thank you very much for everything babyyy<br>
@@ -154,19 +173,21 @@ body{
   </div>
 
   <button class="openBtn" id="openBtn" onclick="openLove()">Reveal My Heart 💖</button>
-
   <div id="bigHeart">❤️</div>
 </div>
 
-<!-- SECOND SCREEN -->
 <div id="secondPage">
 
   <div class="title">Our Love Story 💕</div>
 
   <div class="text">
     From the day you entered my life,<br>
-    everything started making sense.<br>
-    You are my peace, my smile, my forever. ❤️
+    everything started making sense.<br><br>
+    You changed my world without trying,<br>
+    loved me without conditions,<br>
+    and stayed even when it was hard.<br><br>
+    You are not just my love,<br>
+    you are my home, my forever, my miracle. ❤️
   </div>
 
   <div class="counter" id="counter"></div>
@@ -176,7 +197,7 @@ body{
   </div>
 
   <div class="footer">
-    Thank you for everything baby! 💕
+    Always yours. Forever ours. 💕
   </div>
 
 </div>
@@ -193,13 +214,47 @@ function createHeart(){
   heart.style.fontSize=(14+Math.random()*20)+"px";
   heart.style.animationDuration=(4+Math.random()*4)+"s";
   document.body.appendChild(heart);
-
   setTimeout(()=>{heart.remove();},6000);
 }
 setInterval(createHeart,500);
 
+// SOUND EFFECT
+function playExplosionSound(){
+  const ctx=new (window.AudioContext||window.webkitAudioContext)();
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+  osc.type="triangle";
+  osc.frequency.setValueAtTime(300,ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(60,ctx.currentTime+0.5);
+  gain.gain.setValueAtTime(0.3,ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.6);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime+0.6);
+}
+
+// HEART EXPLOSION
+function explodeHearts(){
+  for(let i=0;i<40;i++){
+    const h=document.createElement("div");
+    h.className="burst";
+    h.innerHTML="❤️";
+    const x=(Math.random()*600-300)+"px";
+    const y=(Math.random()*600-300)+"px";
+    h.style.setProperty("--x",x);
+    h.style.setProperty("--y",y);
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),1500);
+  }
+}
+
 // Reveal animation
 function openLove(){
+  playExplosionSound();
+  explodeHearts();
+  document.body.classList.add("explodeBG");
+
   document.getElementById("openBtn").style.display="none";
   document.getElementById("bigHeart").style.display="block";
 
@@ -219,7 +274,6 @@ const startDate=new Date("2024-11-02T00:00:00");
 function updateCounter(){
  const now=new Date();
  let diff=now-startDate;
-
  let s=Math.floor(diff/1000)%60;
  let m=Math.floor(diff/1000/60)%60;
  let h=Math.floor(diff/1000/60/60)%24;
@@ -229,7 +283,6 @@ function updateCounter(){
  "Together since 2 Nov 2024 ❤️<br><br>"+
  d+" Days "+h+" Hours "+m+" Minutes "+s+" Seconds";
 }
-
 setInterval(updateCounter,1000);
 updateCounter();
 </script>
